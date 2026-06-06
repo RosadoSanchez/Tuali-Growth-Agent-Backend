@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+
+# env
+.env
+
+# logs
+logs/
+*.log
+npm-debug.log*
+
+# runtime
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# coverage
+coverage/
+
+# build output
+dist/
+build/
+
+# mac
+.DS_Store
+
+# vscode
+.vscode/
+
+# optional: mongo dump files
+*.bson
+*.archive
