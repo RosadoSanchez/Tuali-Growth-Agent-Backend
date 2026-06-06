@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const OrderDetail = require("../models/OrderDetail");
+const OrderDetail = require("../../models/OrderDetail");
 
 // 🔥 TOOL: obtener pedidos por id_pedido
 router.get("/:id_pedido", async (req, res) => {
