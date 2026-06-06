@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const OrderDetail = require("../models/OrderDetail");
+const OrderDetail = require("../../models/OrderDetail");
 
 // 🔥 top productos
 router.get("/top-products", async (req, res) => {
