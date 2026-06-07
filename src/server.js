@@ -19,6 +19,8 @@ app.use("/api/analytics", require("./routes/analytics"));
 
 app.use("/api/customers", require("./routes/customers"));
 
+app.use("/api/whatsapp", require("./routes/whatsapp"));
+
 app.use(
   "/api/agent",
   require("./routes/agent")

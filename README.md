@@ -385,6 +385,8 @@ Instalar dependencias de desarrollo:
 
 ```bash
 npm install -D nodemon
+npm install node-fetch
+npm install twilio
 ```
 
 Crear archivo `.env`
