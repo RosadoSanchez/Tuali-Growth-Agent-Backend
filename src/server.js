@@ -11,6 +11,8 @@ app.use(express.json());
 connectDB();
 
 // routes
+app.use("/api/auth", require("./routes/auth"));
+
 app.use("/api/orders", require("./routes/orders"));
 
 app.use("/api/order-details", require("./routes/orderDetails"));
