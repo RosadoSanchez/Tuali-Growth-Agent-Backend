@@ -1,23 +1,24 @@
 const express = require("express");
 const router = express.Router();
 
-const OrderDetail = require("../../models/OrderDetail");
+const Order = require("../models/Order");
 
-// 🔥 TOOL: obtener pedidos por id_pedido
-router.get("/:id_pedido", async (req, res) => {
+// todos los pedidos
+router.get("/", async (req, res) => {
   try {
-    const data = await OrderDetail.find({
-      id_pedido: req.params.id_pedido
-    }).limit(100);
+    const orders = await Order.find().limit(100);
 
     res.json({
       success: true,
-      count: data.length,
-      data
+      count: orders.length,
+      data: orders
     });
 
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
   }
 });
 

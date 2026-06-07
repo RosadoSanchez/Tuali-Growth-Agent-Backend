@@ -12,10 +12,20 @@ connectDB();
 
 // routes
 app.use("/api/orders", require("./routes/orders"));
+
+app.use("/api/order-details", require("./routes/orderDetails"));
+
 app.use("/api/analytics", require("./routes/analytics"));
 
+app.use("/api/customers", require("./routes/customers"));
+
+app.use(
+  "/api/agent",
+  require("./routes/agent")
+);
+
 app.get("/", (req, res) => {
-  res.send("API running 🚀");
+  res.send("API running");
 });
 
 const PORT = process.env.PORT || 3000;
