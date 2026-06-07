@@ -3,6 +3,60 @@ const router = express.Router();
 
 const Order = require("../models/Order");
 const OrderDetail = require("../models/OrderDetail");
+const { getCustomerSnapshot } = require("../services/customerData");
+
+// ======================================
+// MARCADOR (datos reales para la pantalla de Capi)
+// GET /api/customers/:customerId/scoreboard
+// ======================================
+router.get("/:customerId/scoreboard", async (req, res) => {
+  try {
+    const snap = await getCustomerSnapshot(req.params.customerId);
+    if (!snap) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Cliente sin datos" });
+    }
+
+    const current = Math.round(snap.currentTicket);
+    const before = Math.round(snap.previousTicket);
+    const goal = Math.max(current + 1, Math.round(before * 1.15));
+
+    const deltaPct = before ? Math.round(((current - before) / before) * 100) : 0;
+    const span = goal - before;
+    const progress = span > 0
+      ? Math.max(0, Math.min(100, Math.round(((current - before) / span) * 100)))
+      : 100;
+    const isGoal = current >= goal;
+
+    const top = snap.topProducts;
+    const whatWorked = [];
+    if (top[0]) whatWorked.push(`${top[0].name} jaló: ${top[0].qty} unidades vendidas.`);
+    if (top[1]) whatWorked.push(`${top[1].name} sumó bien al ticket. ¡Bien ahí!`);
+    if (deltaPct > 0) whatWorked.push(`Tu ticket subió ${deltaPct}% vs el periodo anterior.`);
+    if (!whatWorked.length) whatWorked.push("Mantuviste tus ventas estables esta semana.");
+
+    const whatToAdjust = [];
+    if (top[0]) whatToAdjust.push(`Súrtete de ${top[0].name} antes del finde, se te acaba.`);
+    if (top[1]) whatToAdjust.push(`Pon ${top[1].name} junto a la caja para subir el ticket.`);
+    if (snap.deliveryRate < 95)
+      whatToAdjust.push(`Revisa tus entregas: van al ${snap.deliveryRate.toFixed(0)}%.`);
+
+    res.json({
+      success: true,
+      ticket: { current, before, goal, deltaPct },
+      match: { progress, isGoal },
+      whatWorked,
+      whatToAdjust,
+      meta: {
+        totalOrders: snap.totalOrders,
+        deliveryRate: Math.round(snap.deliveryRate),
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 // Obtener todos los customer_id únicos
 router.get("/ids", async (req, res) => {
